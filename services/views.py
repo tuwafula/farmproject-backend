@@ -4,6 +4,10 @@ from rest_framework.response import Response
 from . import serializers
 from .models import Tender, Input, Investment
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
+
+User=get_user_model()
+
 
 # Create your views here.
 class HelloServicesView(generics.GenericAPIView):
@@ -72,6 +76,32 @@ class TenderDetailView(generics.GenericAPIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class UserTendersView(generics.GenericAPIView):
+    serializer_class=serializers.TenderDetailViewSerializer
+
+    def get(self, request, user_id): 
+        user=User.objects.get(pk=user_id)
+
+        tenders=Tender.objects.all().filter(tender_holder=user)
+
+        serializer=self.serializer_class(instance=tenders, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class UserTenderDetail(generics.GenericAPIView):
+    serializer_class=serializers.TenderDetailViewSerializer
+
+    def get(self, request, user_id, tender_id):
+        user=User.objects.get(pk=user_id)
+
+        tenders=Tender.objects.all().filter(tender_holder=user).get(pk=tender_id)
+
+        serializer=self.serializer_class(instance=tenders)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 
 class InputCreateListView(generics.GenericAPIView):
     serializer_class=serializers.InputViewSerializer
@@ -136,6 +166,32 @@ class InputDetailView(generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class UserInputView(generics.GenericAPIView):
+    serializer_class=serializers.InputDetailViewSerializer
+
+    def get(self, request, user_id): 
+        user=User.objects.get(pk=user_id)
+
+        inputs=Input.objects.all().filter(input_holder=user)
+
+        serializer=self.serializer_class(instance=inputs, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class UserInputDetail(generics.GenericAPIView):
+    serializer_class=serializers.InputDetailViewSerializer
+
+    def get(self, request, user_id, input_id):
+        user=User.objects.get(pk=user_id)
+
+        inputs=Input.objects.all().filter(input_holder=user).get(pk=input_id)
+
+        serializer=self.serializer_class(instance=inputs)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 class InvestmentCreateListView(generics.GenericAPIView):
     serializer_class=serializers.InvestViewSerializer
     queryset=Investment.objects.all()
@@ -197,6 +253,32 @@ class InvestmentDetailView(generics.GenericAPIView):
         investment.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserInvestmentView(generics.GenericAPIView):
+    serializer_class=serializers.InvestDetailViewSerializer
+
+    def get(self, request, user_id): 
+        user=User.objects.get(pk=user_id)
+
+        investments=Investment.objects.all().filter(investor_holder=user)
+
+        serializer=self.serializer_class(instance=investments, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class UserInvestmentDetail(generics.GenericAPIView):
+    serializer_class=serializers.InvestDetailViewSerializer
+
+    def get(self, request, user_id, investor_id):
+        user=User.objects.get(pk=user_id)
+
+        investments=Investment.objects.all().filter(investor_holder=user).get(pk=investor_id)
+
+        serializer=self.serializer_class(instance=investments)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 

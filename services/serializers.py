@@ -26,7 +26,7 @@ class TenderDetailViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tender
         fields = [
-            'name','description', 'date_due', 'location', 'created_at', 'updated_at'
+            'id','name','description', 'date_due', 'location', 'created_at', 'updated_at'
         ]
 
 
@@ -52,7 +52,7 @@ class InvestDetailViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Input
         fields = [
-            'name','description','location', 'created_at', 'updated_at'
+            'id','name','description','location', 'created_at', 'updated_at'
         ]
 
 
@@ -83,7 +83,7 @@ class InputDetailViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Input
         fields = [
-            'name','description', 'quantity', 'price','location', 'created_at', 'updated_at'
+            'id','name','description', 'quantity', 'price','location', 'created_at', 'updated_at'
         ]
 
 
