@@ -2,6 +2,7 @@ from calendar import c
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 from .models import User
 from . import serializers
 
@@ -16,6 +17,7 @@ class FarmerCreateView(generics.GenericAPIView):
 
     serializer_class=serializers.FarmerUserCreationSerializer
 
+    @swagger_auto_schema(operation_summary="Create a farmer's user account")
     def post(self, request):
         data=request.data 
 
@@ -39,6 +41,7 @@ class TenderCreateView(generics.GenericAPIView):
 
     serializer_class=serializers.TenderUserCreationSerializer
 
+    @swagger_auto_schema(operation_summary="Create a tender's user account")
     def post(self, request):
         data=request.data 
 
@@ -61,6 +64,7 @@ class InputCreateView(generics.GenericAPIView):
 
     serializer_class=serializers.InputUserCreationSerializer
 
+    @swagger_auto_schema(operation_summary="Create a input's user account")
     def post(self, request):
         data=request.data 
 
@@ -83,6 +87,7 @@ class InvestorCreateView(generics.GenericAPIView):
 
     serializer_class=serializers.InvestorUserCreationSerializer
 
+    @swagger_auto_schema(operation_summary="Create a investor's user account")
     def post(self, request):
         data=request.data 
 
