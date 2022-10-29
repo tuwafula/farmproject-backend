@@ -226,5 +226,6 @@ class InvestorUserCreationSerializer(serializers.ModelSerializer):
             user=user,
             first_name = profile_data['first_name'],
             last_name = profile_data['last_name'],
+            #phone_numer = profile_data['phone_number']
         )
         return user

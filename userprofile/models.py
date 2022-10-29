@@ -45,7 +45,7 @@ class TenderProfile(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='tenderholder_profile')
     first_name = models.CharField(max_length=50, unique=False)
-    last_name = models.CharField(max_length=50, unique=False) 
+    last_name = models.CharField(max_length=50, unique=False)
 
     class Meta: 
         '''
