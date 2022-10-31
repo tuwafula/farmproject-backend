@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg',
     'rest_auth',
+    'django_seed',
 ]
 
 AUTH_USER_MODEL='authentication.User'
@@ -58,6 +59,8 @@ REST_FRAMEWORK={
     'NON_FIELD_ERRORS_KEY':'errors',
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    
     )
 
 }
