@@ -237,7 +237,7 @@ class InvestmentCreateListView(generics.GenericAPIView):
 
 class InvestmentDetailView(generics.GenericAPIView):
     serializer_class=serializers.InvestDetailViewSerializer
-    #permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated]
 
     @swagger_auto_schema(operation_summary="Retrieve an investment by id")
     def get(self, request, investor_id):

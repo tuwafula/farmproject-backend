@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
+    'rest_auth',
 ]
 
 AUTH_USER_MODEL='authentication.User'

@@ -1,6 +1,7 @@
 from calendar import c
 from django.shortcuts import render
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from .models import User
@@ -105,3 +106,13 @@ class InvestorCreateView(generics.GenericAPIView):
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UserLogoutView(APIView):
+    
+    @staticmethod
+    def delete(self, request, *args, **kwargs):
+        # simply delete the token to force a login
+        request.user.auth_token.delete()
+        data =  {
+            "message" : "You have successfully logged out.",
+        }
+        return Response(data, status=status.HTTP_200_OK)
