@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -7,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
 from .permisisions import IsOwnerOnly
+from rest_framework.exceptions import NotFound
 
 User=get_user_model()
 
@@ -105,16 +107,21 @@ class UserTendersView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Get all tenders for a user")
     def get(self, request, user_id):
-        if request.user.is_tender_holder == True: 
-            user=User.objects.get(pk=user_id)
+        try:
+            if request.user.is_tender_holder == True: 
+                user=User.objects.get(pk=user_id)
 
-            tenders=Tender.objects.all().filter(tender_holder=user)
+                tenders=Tender.objects.all().filter(tender_holder=user)
 
-            serializer=self.serializer_class(instance=tenders, many=True)
-        else:
-            return Response({"Error":"User must be a tender user"})
+                serializer=self.serializer_class(instance=tenders, many=True)
+            else:
+                return Response({"Error":"User must be a tender user"})
 
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({"message": "User does not exist"})
+            response.status_code=500
+            return response
 
 
 class UserTenderDetail(generics.GenericAPIView):
@@ -124,18 +131,26 @@ class UserTenderDetail(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Get a user's specific tender")
     def get(self, request, user_id, tender_id):
-        if request.user.is_tender_holder == True:
+        try:
+            if request.user.is_tender_holder == True:
+                
+                user=User.objects.get(pk=user_id)
+
+                tenders=Tender.objects.all().filter(tender_holder=user).get(pk=tender_id)
+
+                if tenders == False:
+                    raise NotFound("Tender not found")
+                serializer=self.serializer_class(instance=tenders)
             
-            user=User.objects.get(pk=user_id)
+            else:
+                return Response({"Error":"User must be an tender user"})
 
-            tenders=Tender.objects.all().filter(tender_holder=user).get(pk=tender_id)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({"message": "User or tender does not exist"})
+            response.status_code=500
+            return response
 
-            serializer=self.serializer_class(instance=tenders)
-        
-        else:
-            return Response({"Error":"User must be an tender user"})
-
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 
@@ -229,17 +244,24 @@ class UserInputView(generics.GenericAPIView):
 
 
     @swagger_auto_schema(operation_summary="Get all inputs for a user")
-    def get(self, request, user_id): 
-        if request.user.is_input_holder == True:
-            user=User.objects.get(pk=user_id)
+    def get(self, request, user_id):
+        try:
+            if request.user.is_input_holder == True:
+                user=User.objects.get(pk=user_id)
 
-            inputs=Input.objects.all().filter(input_holder=user)
+                inputs=Input.objects.all().filter(input_holder=user)
 
-            serializer=self.serializer_class(instance=inputs, many=True)
-        else:
-            return Response({"Error":"User must be an input user"})
+                serializer=self.serializer_class(instance=inputs, many=True)
+            else:
+                return Response({"Error":"User must be an input user"})
 
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({"message": "User or input does not exist"})
+            response.status_code=500
+            return response
+
+
 
 
 class UserInputDetail(generics.GenericAPIView):
@@ -249,17 +271,24 @@ class UserInputDetail(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Get a user's specific input")
     def get(self, request, user_id, input_id):
-        if request.user.is_input_holder == True:
-            user=User.objects.get(pk=user_id)
+        try:
+            if request.user.is_input_holder == True:
+                user=User.objects.get(pk=user_id)
 
-            inputs=Input.objects.all().filter(input_holder=user).get(pk=input_id)
+                inputs=Input.objects.all().filter(input_holder=user).get(pk=input_id)
+            
+                serializer=self.serializer_class(instance=inputs)
+            else:
+                return Response({"Error":"User must be an input user"})
 
-            serializer=self.serializer_class(instance=inputs)
-        else:
-            return Response({"Error":"User must be an input user"})
+            
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({"message": "Does not exist"})
+            response.status_code=500
+            return response
 
-        
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 
 class InvestmentCreateListView(generics.GenericAPIView):
@@ -350,16 +379,24 @@ class UserInvestmentView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Get all investments for a user")
     def get(self, request, user_id):
-        if request.user.is_investor == True: 
-            user=User.objects.get(pk=user_id)
+        try:
+            if request.user.is_investor == True: 
+                user=User.objects.get(pk=user_id)
 
-            investments=Investment.objects.all().filter(investor_holder=user)
+                investments=Investment.objects.all().filter(investor_holder=user)
 
-            serializer=self.serializer_class(instance=investments, many=True)
-        else:
-            return Response({"Error":"User must be an investor user"})
+                serializer=self.serializer_class(instance=investments, many=True)
+            else:
+                return Response({"Error":"User must be an investor user"})
 
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({"message": "User or investment does not exist"})
+            response.status_code=500
+            return response
+
+
+
 
 
 class UserInvestmentDetail(generics.GenericAPIView):
@@ -369,16 +406,20 @@ class UserInvestmentDetail(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Get a user's specific investment")
     def get(self, request, user_id, investor_id):
-        if request.user.is_investor == True: 
-            user=User.objects.get(pk=user_id)
+        try:
+            if request.user.is_investor == True: 
+                user=User.objects.get(pk=user_id)
 
-            investments=Investment.objects.all().filter(investor_holder=user).get(pk=investor_id)
+                investments=Investment.objects.all().filter(investor_holder=user).get(pk=investor_id)
 
-            serializer=self.serializer_class(instance=investments)
-        else:
-            return Response({"Error":"User must be an investor user"})
+                serializer=self.serializer_class(instance=investments)
+            else:
+                return Response({"Error":"User must be an investor user"})
 
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({"message": "Does not exist"})
+            response.status_code=500
+            return response
 
 
