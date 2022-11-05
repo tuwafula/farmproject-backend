@@ -12,6 +12,7 @@ class Tender(models.Model):
     description=models.TextField()
     date_due=models.DateField()
     location=models.CharField(max_length=255)
+    tender_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -26,6 +27,7 @@ class Input(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     location=models.CharField(max_length=255)
+    input_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,6 +39,7 @@ class Investment(models.Model):
     name=models.CharField(max_length=255)
     description=models.TextField()
     location=models.CharField(max_length=255)
+    investment_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

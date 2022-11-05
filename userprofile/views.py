@@ -24,6 +24,7 @@ class UserProfileView(RetrieveAPIView):
                     'data': [{
                         'first_name': user_profile.first_name,
                         'last_name': user_profile.last_name,
+                        'profile_picture': user_profile.profile_picture.url,
                         #'phone_number': user_profile.phone_number,
                     }]
                 }
@@ -38,6 +39,8 @@ class UserProfileView(RetrieveAPIView):
                     'data': [{
                         'first_name': user_profile.first_name,
                         'last_name': user_profile.last_name,
+                        'profile_picture': user_profile.profile_picture,
+                        'profile_picture': user_profile.profile_picture.url,
                         #'phone_number': user_profile.phone_number,
                     }]
                 }
@@ -52,6 +55,7 @@ class UserProfileView(RetrieveAPIView):
                     'data': [{
                         'first_name': user_profile.first_name,
                         'last_name': user_profile.last_name,
+                        'profile_picture': user_profile.profile_picture.url,
                         #'phone_number': user_profile.phone_number,
                     }]
                 }
@@ -66,6 +70,7 @@ class UserProfileView(RetrieveAPIView):
                     'data': [{
                         'first_name': user_profile.first_name,
                         'last_name': user_profile.last_name,
+                        'profile_picture': user_profile.profile_picture.url,
                         #'phone_number': user_profile.phone_number,
                     }]
                 }

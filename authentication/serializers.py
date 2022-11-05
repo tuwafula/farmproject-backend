@@ -40,22 +40,22 @@ from userprofile.models import TenderProfile, InputProfile, InvestorProfile, Far
 class FarmerSerializer(serializers.ModelSerializer):
     class Meta:
         model = FarmerProfile
-        fields =('first_name', 'last_name')
+        fields =('first_name', 'last_name', 'profile_picture')
 
 class TenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = TenderProfile
-        fields =('first_name', 'last_name')
+        fields =('first_name', 'last_name', 'profile_picture')
 
 class InvestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestorProfile
-        fields =('first_name', 'last_name')
+        fields =('first_name', 'last_name', 'profile_picture')
 
 class InputSerializer(serializers.ModelSerializer):
     class Meta:
         model = InputProfile
-        fields =('first_name', 'last_name')
+        fields =('first_name', 'last_name', 'profile_picture')
 
 
 
@@ -99,6 +99,7 @@ class FarmerUserCreationSerializer(serializers.ModelSerializer):
             user=user,
             first_name = profile_data['first_name'],
             last_name = profile_data['last_name'],
+            profile_picture = profile_data['profile_picture'],
         )
         return user
 
@@ -142,6 +143,7 @@ class TenderUserCreationSerializer(serializers.ModelSerializer):
             user=user,
             first_name = profile_data['first_name'],
             last_name = profile_data['last_name'],
+            profile_picture = profile_data['profile_picture'],
         )
         return user
 
@@ -184,6 +186,7 @@ class InputUserCreationSerializer(serializers.ModelSerializer):
             user=user,
             first_name = profile_data['first_name'],
             last_name = profile_data['last_name'],
+            profile_picture = profile_data['profile_picture'],
         )
         return user
 
@@ -226,6 +229,7 @@ class InvestorUserCreationSerializer(serializers.ModelSerializer):
             user=user,
             first_name = profile_data['first_name'],
             last_name = profile_data['last_name'],
+            profile_picture = profile_data['profile_picture'],
             #phone_numer = profile_data['phone_number']
         )
         return user
