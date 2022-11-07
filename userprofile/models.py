@@ -12,6 +12,7 @@ class FarmerProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='farmer_profile')
     first_name = models.CharField(max_length=50, unique=False)
     last_name = models.CharField(max_length=50, unique=False)
+    profile_picture = models.ImageField(default="wallpaper5.png", null=True, blank=True)
 
     class Meta: 
         '''
@@ -29,6 +30,8 @@ class InvestorProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='investor_profile')
     first_name = models.CharField(max_length=50, unique=True)
     last_name = models.CharField(max_length=50, unique=True)
+    profile_picture = models.ImageField(default="wallpaper5.png", null=True, blank=True)
+
 
     class Meta: 
         '''
@@ -46,6 +49,7 @@ class TenderProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='tenderholder_profile')
     first_name = models.CharField(max_length=50, unique=False)
     last_name = models.CharField(max_length=50, unique=False)
+    profile_picture = models.ImageField(default="wallpaper5.png", null=True, blank=True)
 
     class Meta: 
         '''
@@ -61,6 +65,8 @@ class InputProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='inputholder_profile')
     first_name = models.CharField(max_length=50, unique=False)
     last_name = models.CharField(max_length=50, unique=False)
+    profile_picture = models.ImageField(default="wallpaper5.png", null=True, blank=True)
+
     
     class Meta: 
         '''

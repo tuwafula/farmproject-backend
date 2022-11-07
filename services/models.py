@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
@@ -10,8 +11,10 @@ class Tender(models.Model):
     tender_holder=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=255)
     description=models.TextField()
+    phone_number=PhoneNumberField(null=False)
     date_due=models.DateField()
     location=models.CharField(max_length=255)
+    tender_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -23,9 +26,11 @@ class Input(models.Model):
     input_holder=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=255)
     description=models.TextField()
+    phone_number=PhoneNumberField(null=False)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     location=models.CharField(max_length=255)
+    input_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -36,7 +41,9 @@ class Investment(models.Model):
     investor_holder=models.ForeignKey(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=255)
     description=models.TextField()
+    phone_number=PhoneNumberField(null=False)
     location=models.CharField(max_length=255)
+    investment_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

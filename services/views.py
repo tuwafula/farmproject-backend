@@ -1,3 +1,4 @@
+from ast import Is
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
@@ -7,9 +8,8 @@ from .models import Tender, Input, Investment
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
-from .permisisions import IsOwnerOnly
 from rest_framework.exceptions import NotFound
-
+from rest_framework.permissions import IsAdminUser
 User=get_user_model()
 
 
@@ -22,23 +22,23 @@ class HelloServicesView(generics.GenericAPIView):
 class TenderCreateListView(generics.GenericAPIView):
     serializer_class=serializers.TenderViewSerializer
     queryset=Tender.objects.all()
-    permission_classes=[IsAuthenticated, IsOwnerOnly]
+    permission_classes=[IsAuthenticated,]
 
     @swagger_auto_schema(operation_summary="list all tenders")
     def get(self, request):
-        if request.user.is_tender_holder == True:
+        if request.user.is_tender_holder or request.user.is_superuser or request.user.is_farmer == True:
 
             tenders = Tender.objects.all()
 
             serializer=self.serializer_class(instance=tenders, many=True)
         else:
-            return Response({"Error":"User must be an tender user"})
+            return Response({"Error":"User must be a tender user"})
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
  
     @swagger_auto_schema(operation_summary="create a new tender")   
     def post (self, request):
-        if request.user.is_tender_holder == True:
+        if request.user.is_tender_holder or request.user.is_superuser == True:
 
             data=request.data
 
@@ -51,7 +51,7 @@ class TenderCreateListView(generics.GenericAPIView):
 
                 return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"Error":"User must be an tender user"})
+            return Response({"Error":"User must be a tender user"})
             
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -61,7 +61,7 @@ class TenderDetailView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Retrieve a tender by id")
     def get(self, request, tender_id):
-        if request.user.is_tender_holder == True:
+        if request.user.is_tender_holder or request.user.is_superuser or request.user.is_farmer == True:
 
             tender=get_object_or_404(Tender, pk=tender_id)
 
@@ -73,7 +73,7 @@ class TenderDetailView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Update a tender by id")
     def put(self, request, tender_id):
-        if request.user.is_tender_holder == True:
+        if request.user.is_tender_holder or request.user.is_superuser == True:
             data=request.data 
 
             tender=get_object_or_404(Tender, pk=tender_id)
@@ -91,7 +91,7 @@ class TenderDetailView(generics.GenericAPIView):
         
     @swagger_auto_schema(operation_summary="Delete a tender")
     def delete(self, request, tender_id):
-        if request.user.is_tender_holder == True:
+        if request.user.is_tender_holder or request.user.is_superuser == True:
             tender=get_object_or_404(Tender, pk=tender_id)
 
             tender.delete()
@@ -102,13 +102,14 @@ class TenderDetailView(generics.GenericAPIView):
 
 class UserTendersView(generics.GenericAPIView):
     serializer_class=serializers.TenderDetailViewSerializer
+    queryset=Tender.objects.all()
     permission_classes=[IsAuthenticated,]
 
 
     @swagger_auto_schema(operation_summary="Get all tenders for a user")
     def get(self, request, user_id):
         try:
-            if request.user.is_tender_holder == True: 
+            if request.user.is_tender_holder or request.user.is_superuser == True: 
                 user=User.objects.get(pk=user_id)
 
                 tenders=Tender.objects.all().filter(tender_holder=user)
@@ -132,7 +133,7 @@ class UserTenderDetail(generics.GenericAPIView):
     @swagger_auto_schema(operation_summary="Get a user's specific tender")
     def get(self, request, user_id, tender_id):
         try:
-            if request.user.is_tender_holder == True:
+            if request.user.is_tender_holder or request.user.is_superuser == True:
                 
                 user=User.objects.get(pk=user_id)
 
@@ -157,12 +158,12 @@ class UserTenderDetail(generics.GenericAPIView):
 class InputCreateListView(generics.GenericAPIView):
     serializer_class=serializers.InputViewSerializer
     queryset=Input.objects.all()
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,]
 
     
     @swagger_auto_schema(operation_summary="List all inputs")
     def get(self, request):
-        if request.user.is_input_holder == True:
+        if request.user.is_input_holder or request.user.is_superuser or request.user.is_farmer == True:
             inputs = Input.objects.all()
 
             serializer=self.serializer_class(instance=inputs, many=True)
@@ -176,7 +177,7 @@ class InputCreateListView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Create a new input")
     def post (self, request):
-        if request.user.is_input_holder == True:
+        if request.user.is_input_holder or request.user.is_superuser == True:
             data=request.data
 
             serializer=self.serializer_class(data=data)     
@@ -195,11 +196,11 @@ class InputCreateListView(generics.GenericAPIView):
 
 class InputDetailView(generics.GenericAPIView):
     serializer_class=serializers.InputDetailViewSerializer
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,]
 
     @swagger_auto_schema(operation_summary="Retrieve an input by id")
     def get(self, request, input_id):
-        if request.user.is_input_holder == True:
+        if request.user.is_input_holder or request.user.is_superuser or request.user.is_farmer == True:
         
             input=get_object_or_404(Input, pk=input_id)
 
@@ -210,7 +211,7 @@ class InputDetailView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Update an input by id")
     def put(self, request, input_id):
-        if request.user.is_input_holder == True:
+        if request.user.is_input_holder or request.user.is_superuser == True:
             data=request.data 
 
             input=get_object_or_404(Input, pk=input_id)
@@ -228,7 +229,7 @@ class InputDetailView(generics.GenericAPIView):
         
     @swagger_auto_schema(operation_summary="Delete an input")
     def delete(self, request, input_id):
-        if request.user.is_input_holder == True:
+        if request.user.is_input_holder or request.user.is_superuser == True:
             input=get_object_or_404(Input, pk=input_id)
 
             input.delete()
@@ -240,13 +241,14 @@ class InputDetailView(generics.GenericAPIView):
 
 class UserInputView(generics.GenericAPIView):
     serializer_class=serializers.InputDetailViewSerializer
+    queryset=Input.objects.all()
     permission_classes=[IsAuthenticated,]
 
 
     @swagger_auto_schema(operation_summary="Get all inputs for a user")
     def get(self, request, user_id):
         try:
-            if request.user.is_input_holder == True:
+            if request.user.is_input_holder or request.user.is_superuser == True:
                 user=User.objects.get(pk=user_id)
 
                 inputs=Input.objects.all().filter(input_holder=user)
@@ -266,13 +268,13 @@ class UserInputView(generics.GenericAPIView):
 
 class UserInputDetail(generics.GenericAPIView):
     serializer_class=serializers.InputDetailViewSerializer
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,]
 
 
     @swagger_auto_schema(operation_summary="Get a user's specific input")
     def get(self, request, user_id, input_id):
         try:
-            if request.user.is_input_holder == True:
+            if request.user.is_input_holder or request.user.is_superuser == True:
                 user=User.objects.get(pk=user_id)
 
                 inputs=Input.objects.all().filter(input_holder=user).get(pk=input_id)
@@ -294,11 +296,11 @@ class UserInputDetail(generics.GenericAPIView):
 class InvestmentCreateListView(generics.GenericAPIView):
     serializer_class=serializers.InvestViewSerializer
     queryset=Investment.objects.all()
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,]
 
     @swagger_auto_schema(operation_summary="List all investments")
     def get(self, request):
-        if request.user.is_investor == True:
+        if request.user.is_investor or request.user.is_superuser or request.user.is_farmer == True:
             investments = Investment.objects.all()
 
             serializer=self.serializer_class(instance=investments, many=True)
@@ -309,7 +311,7 @@ class InvestmentCreateListView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Create a new investment")
     def post (self, request):
-        if request.user.is_investor == True:
+        if request.user.is_investor or request.user.is_superuser == True:
             data=request.data
 
             serializer=self.serializer_class(data=data)
@@ -328,11 +330,11 @@ class InvestmentCreateListView(generics.GenericAPIView):
 
 class InvestmentDetailView(generics.GenericAPIView):
     serializer_class=serializers.InvestDetailViewSerializer
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,]
 
     @swagger_auto_schema(operation_summary="Retrieve an investment by id")
     def get(self, request, investor_id):
-        if request.user.is_investor == True:
+        if request.user.is_investor or request.user.is_superuser or request.user.is_farmer == True:
 
             investment=get_object_or_404(Input, pk=investor_id)
 
@@ -343,7 +345,7 @@ class InvestmentDetailView(generics.GenericAPIView):
 
     @swagger_auto_schema(operation_summary="Update an investmnent by id")
     def put(self, request, investor_id):
-        if request.user.is_investor == True:
+        if request.user.is_investor or request.user.is_superuser == True:
             data=request.data 
 
             investment=get_object_or_404(Investment, pk=investor_id)
@@ -361,7 +363,7 @@ class InvestmentDetailView(generics.GenericAPIView):
         
     @swagger_auto_schema(operation_summary="Delete an investment")
     def delete(self, request, investor_id):
-        if request.user.is_investor == True:
+        if request.user.is_investor or request.user.is_superuser == True:
 
             investment=get_object_or_404(Investment, pk=investor_id)
 
@@ -374,13 +376,14 @@ class InvestmentDetailView(generics.GenericAPIView):
 
 class UserInvestmentView(generics.GenericAPIView):
     serializer_class=serializers.InvestDetailViewSerializer
+    queryset=Investment.objects.all()
     permission_classes=[IsAuthenticated,]
 
 
     @swagger_auto_schema(operation_summary="Get all investments for a user")
     def get(self, request, user_id):
         try:
-            if request.user.is_investor == True: 
+            if request.user.is_investor or request.user.is_superuser == True: 
                 user=User.objects.get(pk=user_id)
 
                 investments=Investment.objects.all().filter(investor_holder=user)
@@ -407,7 +410,7 @@ class UserInvestmentDetail(generics.GenericAPIView):
     @swagger_auto_schema(operation_summary="Get a user's specific investment")
     def get(self, request, user_id, investor_id):
         try:
-            if request.user.is_investor == True: 
+            if request.user.is_investor or request.user.is_superuser == True: 
                 user=User.objects.get(pk=user_id)
 
                 investments=Investment.objects.all().filter(investor_holder=user).get(pk=investor_id)
