@@ -14,7 +14,6 @@ class Tender(models.Model):
     phone_number=PhoneNumberField(null=False)
     date_due=models.DateField()
     location=models.CharField(max_length=255)
-    tender_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -43,7 +42,6 @@ class Investment(models.Model):
     description=models.TextField()
     phone_number=PhoneNumberField(null=False)
     location=models.CharField(max_length=255)
-    investment_picture = models.ImageField(default="wallpaper4.jpg", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
