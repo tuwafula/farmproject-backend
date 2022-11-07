@@ -38,21 +38,38 @@ from userprofile.models import TenderProfile, InputProfile, InvestorProfile, Far
 
 
 class FarmerSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    profile_picture = serializers.ImageField(default="wallpaper5.png")
+
     class Meta:
         model = FarmerProfile
         fields =('first_name', 'last_name', 'profile_picture')
 
 class TenderSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    profile_picture = serializers.ImageField(default="wallpaper5.png")
+
     class Meta:
         model = TenderProfile
         fields =('first_name', 'last_name', 'profile_picture')
 
 class InvestorSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    profile_picture = serializers.ImageField(default="wallpaper5.png")
+
+
     class Meta:
         model = InvestorProfile
         fields =('first_name', 'last_name', 'profile_picture')
 
 class InputSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length=50)
+    last_name = serializers.CharField(max_length=50)
+    profile_picture = serializers.ImageField(default="wallpaper5.png")
+
     class Meta:
         model = InputProfile
         fields =('first_name', 'last_name', 'profile_picture')
