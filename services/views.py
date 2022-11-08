@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAdminUser
+from rest_framework_word_filter import FullWordSearchFilter
 User=get_user_model()
 
 
@@ -22,6 +23,8 @@ class HelloServicesView(generics.GenericAPIView):
 class TenderCreateListView(generics.GenericAPIView):
     serializer_class=serializers.TenderViewSerializer
     queryset=Tender.objects.all()
+    filter_backends = (FullWordSearchFilter,)
+    word_fields = ('name', 'location')
     permission_classes=[IsAuthenticated,]
 
     @swagger_auto_schema(operation_summary="list all tenders")

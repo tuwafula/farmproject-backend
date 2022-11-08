@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_auth',
     'django_seed',
+    'rest_framework_word_filter',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 AUTH_USER_MODEL='authentication.User'
@@ -68,7 +70,7 @@ REST_FRAMEWORK={
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME':timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME':timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME':timedelta(days=1),
 }
 
