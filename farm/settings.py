@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_auth',
     'django_seed',
+    'rest_framework_word_filter',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 AUTH_USER_MODEL='authentication.User'
@@ -68,7 +70,7 @@ REST_FRAMEWORK={
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME':timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME':timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME':timedelta(days=1),
 }
 
@@ -173,3 +175,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#SMTP Configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'agreywafula147@gmail.com'
+EMAIL_HOST_PASSWORD = 'ydffgbtvhympyjhi'

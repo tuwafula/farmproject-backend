@@ -10,12 +10,11 @@ class TenderViewSerializer(serializers.ModelSerializer):
     date_due=serializers.DateField()
     location=serializers.CharField(max_length=255)
     phone_number=PhoneNumberField(allow_null=False, allow_blank=False)
-    tender_picture = serializers.ImageField(default='wallpaper4.jpg')
    
     class Meta:
         model = Tender
         fields = [
-            'id','name','description', 'date_due', 'location', 'phone_number', 'tender_picture'
+            'id','name','description', 'date_due', 'location', 'phone_number'
         ]
 
 class TenderDetailViewSerializer(serializers.ModelSerializer):
@@ -26,12 +25,11 @@ class TenderDetailViewSerializer(serializers.ModelSerializer):
     phone_number=PhoneNumberField(allow_null=False, allow_blank=False)
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
-    tender_picture = serializers.ImageField(default='wallpaper4.jpg')
    
     class Meta:
         model = Tender
         fields = [
-            'id','name','description', 'date_due', 'location', 'phone_number', 'created_at', 'updated_at', 'tender_picture'
+            'id','name','description', 'date_due', 'location', 'phone_number', 'created_at', 'updated_at'
         ]
 
 
@@ -40,12 +38,11 @@ class InvestViewSerializer(serializers.ModelSerializer):
     description=serializers.CharField()
     location=serializers.CharField(max_length=255)
     phone_number=PhoneNumberField(allow_null=False, allow_blank=False)
-    investment_picture = serializers.ImageField(default='wallpaper4.jpg')
 
     class Meta:
         model = Investment
         fields = [
-            'id','name', 'description', 'location', 'phone_number', 'investment_picture'
+            'id','name', 'description', 'location', 'phone_number'
         ]
 
 class InvestDetailViewSerializer(serializers.ModelSerializer):
@@ -55,13 +52,12 @@ class InvestDetailViewSerializer(serializers.ModelSerializer):
     phone_number=PhoneNumberField(allow_null=False, allow_blank=False)
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
-    investment_picture = serializers.ImageField(default='wallpaper4.jpg')
 
    
     class Meta:
         model = Input
         fields = [
-            'id','name','description','location', 'phone_number', 'created_at', 'updated_at', 'investment_picture'
+            'id','name','description','location', 'phone_number', 'created_at', 'updated_at'
         ]
 
 
